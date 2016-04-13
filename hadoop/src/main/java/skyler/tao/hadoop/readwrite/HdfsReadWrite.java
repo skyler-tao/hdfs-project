@@ -14,8 +14,6 @@ import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-import skyler.tao.hadoop.HdfsReader;
-
 public class HdfsReadWrite extends Configured implements Tool {
     
     public static final String FS_PARAM_NAME = "fs.defaultFS";
@@ -71,8 +69,10 @@ public class HdfsReadWrite extends Configured implements Tool {
         		target.setService_name(json.getString("service_name"));
         		
         		messageProcessed = target.toString();
+                logger.info(messageProcessed);
         		bw.write(messageProcessed);
         	}
+            bw.flush();
         } catch (Exception e) {
         	
         } finally {
@@ -83,7 +83,7 @@ public class HdfsReadWrite extends Configured implements Tool {
     }
     
     public static void main( String[] args ) throws Exception {
-        int returnCode = ToolRunner.run(new HdfsReader(), args);
+        int returnCode = ToolRunner.run(new HdfsReadWrite(), args);
         System.exit(returnCode);
     }
 }
