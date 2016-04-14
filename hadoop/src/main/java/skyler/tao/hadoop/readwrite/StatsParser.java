@@ -1,6 +1,10 @@
 package skyler.tao.hadoop.readwrite;
 
-import org.json.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class StatsParser {
     public static final String L1S = "\\x1A";
@@ -44,6 +48,7 @@ public class StatsParser {
         for (String s : parts) {
             JSONObject obj = new JSONObject();
             String[] xParts = s.split(CS);
+            List<String> poses = new ArrayList<String>();
             for (String kv : xParts) {
                 int c = kv.indexOf(":");
                 if (c < 1) {
@@ -59,10 +64,13 @@ public class StatsParser {
                     JSONArray l3 = this.doParse(v, L3S, L3CS);
                     this.l3Count += l3.length();
                     obj.put(k, l3);
+                } else if ("pos".equals(k)){
+                	poses.add(v);
                 } else {
-                    obj.put(k, v);
+                	obj.put(k, v);
                 }
             }
+            obj.put("pos", poses.toString());
             arr.put(obj);
         }
         return arr;

@@ -16,19 +16,19 @@ public class StatsHiveTarget {
 	private String idfa;
 	private String imei;
 	private String location;
-	private int is_unread_pool;
-	private int loadmore;
-	private int feedsnum;
-	private int unread_status;
-	private int last_span;
+	private String is_unread_pool;
+	private String loadmore;
+	private String feedsnum;
+	private String unread_status;
+	private String last_span;
 	private String product_r;
-	private int refresh_type;
+	private String refresh_type;
 	private String postostock;
 	private String tmeta;
 	private String stat_date;
 	private String service_name;
 	
-	private final String DELIMITED = ",";
+	private final String DELIMITED = "*";
 	
 	public String getReqtime() {
 		return reqtime;
@@ -114,34 +114,34 @@ public class StatsHiveTarget {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	public int getIs_unread_pool() {
+	public String getIs_unread_pool() {
 		return is_unread_pool;
 	}
-	public void setIs_unread_pool(int is_unread_pool) {
+	public void setIs_unread_pool(String is_unread_pool) {
 		this.is_unread_pool = is_unread_pool;
 	}
-	public int getLoadmore() {
+	public String getLoadmore() {
 		return loadmore;
 	}
-	public void setLoadmore(int loadmore) {
+	public void setLoadmore(String loadmore) {
 		this.loadmore = loadmore;
 	}
-	public int getFeedsnum() {
+	public String getFeedsnum() {
 		return feedsnum;
 	}
-	public void setFeedsnum(int feedsnum) {
+	public void setFeedsnum(String feedsnum) {
 		this.feedsnum = feedsnum;
 	}
-	public int getUnread_status() {
+	public String getUnread_status() {
 		return unread_status;
 	}
-	public void setUnread_status(int unread_status) {
+	public void setUnread_status(String unread_status) {
 		this.unread_status = unread_status;
 	}
-	public int getLast_span() {
+	public String getLast_span() {
 		return last_span;
 	}
-	public void setLast_span(int last_span) {
+	public void setLast_span(String last_span) {
 		this.last_span = last_span;
 	}
 	public String getProduct_r() {
@@ -150,10 +150,10 @@ public class StatsHiveTarget {
 	public void setProduct_r(String product_r) {
 		this.product_r = product_r;
 	}
-	public int getRefresh_type() {
+	public String getRefresh_type() {
 		return refresh_type;
 	}
-	public void setRefresh_type(int refresh_type) {
+	public void setRefresh_type(String refresh_type) {
 		this.refresh_type = refresh_type;
 	}
 	public String getPostostock() {
@@ -183,6 +183,30 @@ public class StatsHiveTarget {
 	
 	@Override
 	public String toString() {
-		return reqtime + DELIMITED + reqid + DELIMITED;		//todo
+		return reqtime + DELIMITED + 
+			   reqid + DELIMITED +
+			   uid + DELIMITED +
+			   from + DELIMITED +
+			   platform + DELIMITED +
+			   version + DELIMITED +
+			   ip + DELIMITED +
+			   proxy_source + DELIMITED +
+			   wm + DELIMITED +
+			   available_pos + DELIMITED +
+			   category_r + DELIMITED +
+			   idfa + DELIMITED +
+			   imei + DELIMITED +
+			   location + DELIMITED +
+			   is_unread_pool + DELIMITED +
+			   loadmore + DELIMITED +
+			   feedsnum + DELIMITED +
+			   unread_status + DELIMITED +
+			   last_span + DELIMITED +
+			   product_r + DELIMITED +
+			   refresh_type + DELIMITED +
+			   postostock + DELIMITED +
+			   tmeta + DELIMITED + 
+			   stat_date + DELIMITED +
+			   service_name + "\n";
 	}
 }

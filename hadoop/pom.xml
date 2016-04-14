@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>skyler.tao</groupId>
-	<artifactId>hadoop</artifactId>
-	<version>0.0.1</version>
+	<artifactId>hdfs2hdfs</artifactId>
+	<version>0.0.2</version>
 	<packaging>jar</packaging>
 
-	<name>hadoop</name>
+	<name>hdfs2hdfs</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>

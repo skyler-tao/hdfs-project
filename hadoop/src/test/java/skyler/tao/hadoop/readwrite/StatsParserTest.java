@@ -23,8 +23,10 @@ public class StatsParserTest {
 //		            System.out.println(", " + available_pos_num);
 //		            System.out.print(", L2: " + p.getL2Count());
 //		            System.out.println(", L3: " + p.getL3Count());
-		            System.out.println(json.getString("reqid"));
-		            System.out.println(json.getString("reqtime"));
+//		            System.out.println(json.getString("reqid"));
+//		            System.out.println(json.getString("reqtime"));
+//		            System.out.println(json.optString("tmeta_l2"));
+		            System.out.println(json.optString("pos"));
 		        }
 		    } catch (Exception ex) {
 		        System.out.println(ex);

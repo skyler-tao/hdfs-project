@@ -1,49 +1,31 @@
 package skyler.tao.hadoop.readwrite;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.FileReader;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-import org.apache.log4j.Logger;
 import org.json.JSONObject;
+import org.junit.Test;
 
-public class HdfsReadWrite extends Configured implements Tool {
-    
-    public static final String FS_PARAM_NAME = "fs.defaultFS";
-    private static final Logger logger = Logger.getLogger(HdfsReadWrite.class);
-    
-    public int run(String[] args) throws Exception {
-        
-        if (args.length < 2) {
-            logger.info("HdfsReadWrite [hdfs input path] [hdfs output path]");
-            return 1;
-        }
-        
-        Path inputPath = new Path(args[0]);
-        Path outputPath = new Path(args[1]);
-        
-        Configuration conf = getConf();
-        logger.info("configured filesystem = " + conf.get(FS_PARAM_NAME));
-        FileSystem fs = FileSystem.get(conf);
-        BufferedReader br = new BufferedReader(new InputStreamReader(fs.open(inputPath)));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fs.create(outputPath,false)));
-        
-        String message = null;
-        String messageProcessed = null;
-        try {
-        	while ((message = br.readLine())!= null) {
-        		
-        		StatsParser parser = new StatsParser(message);
+public class HdfsReadWriteTest {
+
+	public static final String L1S = "\\x1A";
+	public static final String L1CS = "\\x1C";
+
+	@Test
+	public void parseTmeta() throws Exception {
+		
+		String file = "stats_log_sample.log";
+	    BufferedReader reader = null;
+	    System.out.println("Start...");
+	    try {
+	        reader = new BufferedReader(new FileReader(file));
+	        String message = null;
+	        while ((message = reader.readLine()) != null) {
+	        	StatsParser parser = new StatsParser(message);
         		StatsHiveTarget target = new StatsHiveTarget();
         		JSONObject json = parser.getJSONObject();
         		target.setReqtime(json.optString("reqtime","null"));
@@ -73,23 +55,28 @@ public class HdfsReadWrite extends Configured implements Tool {
         		Date date = new Date(timestamp.getTime());
         		target.setStat_date(date.toString());
         		target.setService_name(json.optString("service_name","null"));
-        		
-        		messageProcessed = target.toString();
-                logger.info(messageProcessed);
-        		bw.write(messageProcessed);
-        	}
-            bw.flush();
-        } catch (Exception e) {
-        	
-        } finally {
-        	br.close();
-        	bw.close();
-        }
-        return 0;
-    }
-    
-    public static void main( String[] args ) throws Exception {
-        int returnCode = ToolRunner.run(new HdfsReadWrite(), args);
-        System.exit(returnCode);
-    }
+	    		System.out.println(target.toString());
+	        }
+	    } catch (Exception e) {
+	    	System.out.println("ERROR!");
+	    	e.printStackTrace();
+	    } finally {
+	    	reader.close();
+	    }
+	}
+	
+//	@Test
+	public void reqtime2dateTest() {
+		String reqtime = "1460629505";
+		System.out.println(Long.parseLong(reqtime));
+//		Timestamp timestamp = new Timestamp(Long.parseLong(reqtime));
+//		System.out.println(timestamp.toString());
+		Calendar start = Calendar.getInstance();
+		start.setTimeInMillis(Long.parseLong(reqtime));
+		System.out.println(start.getWeekYear());
+		Date date = start.getTime();
+//		System.out.println(date.toString());
+		SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD");
+//		System.out.println(format.format(date).toString());
+	}
 }
