@@ -75,7 +75,6 @@ public class HdfsReadWrite extends Configured implements Tool {
         		target.setService_name(json.optString("service_name","null"));
         		
         		messageProcessed = target.toString();
-                logger.info(messageProcessed);
         		bw.write(messageProcessed);
         	}
             bw.flush();
