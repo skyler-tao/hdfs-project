@@ -72,8 +72,9 @@ public class HdfsReadWrite extends Configured implements Tool {
 		StatsHiveTarget target = new StatsHiveTarget();
 		JSONObject json = parser.getJSONObject();
 		String reqtime = json.optString("reqtime", "null");
-		if (reqtime == null)
+		if (reqtime.contains("null") || "".equals(reqtime)) {
 			return null;
+		}
 		target.setReqtime(reqtime);
 		target.setReqid(json.optString("reqid", "null"));
 		target.setUid(json.optString("uid", "null"));

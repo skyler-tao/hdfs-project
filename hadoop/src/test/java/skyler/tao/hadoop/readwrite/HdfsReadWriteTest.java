@@ -1,13 +1,16 @@
 package skyler.tao.hadoop.readwrite;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
+import org.json.JSONObject;
 import org.junit.Test;
 
 public class HdfsReadWriteTest {
@@ -18,22 +21,28 @@ public class HdfsReadWriteTest {
 	@Test
 	public void parseLineTest() throws Exception {
 		
-		String file = "stats_log_sample.log";
+		String input = "stats_log_sample.log";
+		String output = "stats_log_sample_out.log";
 	    BufferedReader reader = null;
+	    BufferedWriter writer = null;
 	    System.out.println("Start...");
 	    try {
-	        reader = new BufferedReader(new FileReader(file));
+	        reader = new BufferedReader(new FileReader(input));
+	        writer = new BufferedWriter(new FileWriter(output));
 	        String message = null;
 	        HdfsReadWrite targetClass = new HdfsReadWrite();
 	        while ((message = reader.readLine()) != null) {
 	        	String parsedLine = targetClass.parseLine(message);
-	    		System.out.println(parsedLine);
+	        	if (parsedLine == null)
+					continue;
+	        	writer.write(parsedLine);
 	        }
 	    } catch (Exception e) {
 	    	System.out.println("ERROR!");
 	    	e.printStackTrace();
 	    } finally {
 	    	reader.close();
+	    	writer.close();
 	    }
 	}
 	
@@ -53,5 +62,19 @@ public class HdfsReadWriteTest {
 		Instant instant = Instant.ofEpochMilli(millis);
 		DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		System.out.println(fmt.format(instant.atZone(ZoneId.systemDefault())));
+	}
+	
+//	@Test
+	public void optStringTest() {
+		JSONObject json = new JSONObject();
+		json.append("reqtime", null);
+		String reqtime = json.optString("reqtime", "null");
+		System.out.println("reqtime: " + reqtime);
+		if (reqtime == null)
+			System.out.println("false");
+		if ("null".equals(reqtime))
+			System.out.println("true");
+		if (reqtime.contains("null"))
+			System.out.println("get it!");
 	}
 }
