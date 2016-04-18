@@ -37,16 +37,16 @@ public class HdfsReadWriteTest {
 	    }
 	}
 	
-	@Test
+//	@Test
 	public void reqtime2dateTest() {
-		String reqtime = "1460629505";
+		String reqtime = null;
 		long millis = Long.parseLong(reqtime) * 1000;
 		Date date = new Date(millis);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 		System.out.println(format.format(date).toString());
 	}
 	
-	@Test
+//	@Test
 	public void reqtime2date2() {
 		String reqtime = "1460629505";
 		long millis = Long.parseLong(reqtime) * 1000;

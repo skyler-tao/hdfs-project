@@ -38,10 +38,14 @@ public class HdfsReadWrite extends Configured implements Tool {
 		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fs.create(outputPath, false)));
 
 		String message = null;
+		String messageParsed = null;
 		try {
 			while ((message = br.readLine()) != null) {
-
-				bw.write(parseLine(message));
+				
+				messageParsed = parseLine(message);
+				if (messageParsed == null)
+					continue;
+				bw.write(messageParsed);
 			}
 			bw.flush();
 		} catch (Exception e) {
@@ -53,12 +57,24 @@ public class HdfsReadWrite extends Configured implements Tool {
 		return 0;
 	}
 	
-	public String parseLine(String message) {
+	public String parseLine(String log) {
+		int index = log.indexOf('|');
+		String message = null;
+		if (index > 0) {
+			message = log.substring(index + 1);
+		}
+		
+		if (message == null)
+			return null;
+		
 		String result = "";
 		StatsParser parser = new StatsParser(message);
 		StatsHiveTarget target = new StatsHiveTarget();
 		JSONObject json = parser.getJSONObject();
-		target.setReqtime(json.optString("reqtime", "null"));
+		String reqtime = json.optString("reqtime", "null");
+		if (reqtime == null)
+			return null;
+		target.setReqtime(reqtime);
 		target.setReqid(json.optString("reqid", "null"));
 		target.setUid(json.optString("uid", "null"));
 		target.setFrom(json.optString("from", "null"));
