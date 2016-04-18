@@ -117,7 +117,10 @@ public class HdfsReadWrite extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
+		long startTime = System.currentTimeMillis();
 		int returnCode = ToolRunner.run(new HdfsReadWrite(), args);
+		long endTime = System.currentTimeMillis();
+		logger.info("It takes " + (endTime - startTime)/1000/60/60 + " hours times!");
 		System.exit(returnCode);
 	}
 }
