@@ -30,7 +30,7 @@ public class HdfsReadWriteTest {
 	        reader = new BufferedReader(new FileReader(input));
 	        writer = new BufferedWriter(new FileWriter(output));
 	        String message = null;
-	        HdfsReadWrite targetClass = new HdfsReadWrite();
+	        ReadWriteProcess targetClass = new ReadWriteProcess();
 	        while ((message = reader.readLine()) != null) {
 	        	String parsedLine = targetClass.parseLine(message);
 	        	if (parsedLine == null)

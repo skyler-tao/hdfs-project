@@ -12,14 +12,13 @@ import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-public class HdfsReadWrite extends Configured implements Tool {
+public class ReadWriteProcess extends Configured implements Tool {
 
 	public static final String FS_PARAM_NAME = "fs.defaultFS";
-	private static final Logger logger = Logger.getLogger(HdfsReadWrite.class);
+	private static final Logger logger = Logger.getLogger(ReadWriteProcess.class);
 
 	public int run(String[] args) throws Exception {
 
@@ -41,7 +40,7 @@ public class HdfsReadWrite extends Configured implements Tool {
 		String messageParsed = null;
 		try {
 			while ((message = br.readLine()) != null) {
-				
+
 				messageParsed = parseLine(message);
 				if (messageParsed == null)
 					continue;
@@ -56,17 +55,17 @@ public class HdfsReadWrite extends Configured implements Tool {
 		}
 		return 0;
 	}
-	
+
 	public String parseLine(String log) {
 		int index = log.indexOf('|');
 		String message = null;
 		if (index > 0) {
 			message = log.substring(index + 1);
 		}
-		
+
 		if (message == null)
 			return null;
-		
+
 		String result = "";
 		StatsParser parser = new StatsParser(message);
 		StatsHiveTarget target = new StatsHiveTarget();
@@ -108,19 +107,13 @@ public class HdfsReadWrite extends Configured implements Tool {
 	private String reqtime2date(String reqtime) {
 		String result = "";
 		if (reqtime.length() == 10) {
-			long millis = Long.parseLong(reqtime) * 1000;
-			Date date = new Date(millis);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			result = format.format(date).toString();
+			try {
+				long millis = Long.parseLong(reqtime) * 1000;
+				Date date = new Date(millis);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+				result = format.format(date).toString();
+			} catch (Exception e) {}
 		}
 		return result;
-	}
-
-	public static void main(String[] args) throws Exception {
-		long startTime = System.currentTimeMillis();
-		int returnCode = ToolRunner.run(new HdfsReadWrite(), args);
-		long endTime = System.currentTimeMillis();
-		logger.info("It takes " + (endTime - startTime)/1000/60/60 + " hours times!");
-		System.exit(returnCode);
 	}
 }
