@@ -52,7 +52,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>skyler.tao.hadoop.readwrite.HdfsReadWrite</mainClass>
+							<mainClass>skyler.tao.hadoop.readwrite.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
